@@ -5,7 +5,7 @@ use MooseX::Types -declare => [ 'LogLevel', 'Logger' ];
 use MooseX::Types::Moose qw/Str HashRef ArrayRef/;
 use Log::Dispatch;
 
-our $VERSION = '0.001000';
+our $VERSION = '0.002000';
 
 subtype LogLevel,
   as Str,
@@ -20,12 +20,11 @@ coerce Logger,
 
 coerce Logger,
   from ArrayRef,
-  via { Log::Dispatch->new( @$_ ) };
+  via { Log::Dispatch->new( outputs => $_ ) };
 
 1;
 
 __END__;
-
 
 =head1 NAME
 
@@ -55,7 +54,7 @@ Moose
 
     my $obj1 = MyFoos->new(
       event_log_level => 'debug',
-      logger => [ outputs => [ ['Screen', min_level => 'notice' ] ] ]
+      logger => [ ['Screen', min_level => 'notice' ] ]
     );
 
     ## or
@@ -77,8 +76,9 @@ working with Log::Dispatch;
 
 =head2 Logger
 
-Class type for 'Log::Dispatch' optional coercion will turn dereference an
-array or hash reference and pass it to 'new'.
+Class type for 'Log::Dispatch' optional coercion will turn dereference a
+hash reference and pass it to 'new' or treat an array reference as a list
+of C<outputs>.
 
 =head2 LogLevel
 

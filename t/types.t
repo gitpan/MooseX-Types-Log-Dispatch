@@ -40,7 +40,7 @@ my $obj1;
 lives_ok {
   $obj1 = TestMXTypesLogDispatch->new(
     event_log_level => 'debug',
-    logger => [ outputs => [ ['Null', min_level => 'notice' ] ] ]
+    logger => [ ['Null', min_level => 'notice' ] ]
   );
 } 'coerces ok';
 
